@@ -627,6 +627,14 @@ document.addEventListener("DOMContentLoaded", () => {
           tooltip.textContent = original;
           btn.classList.remove("share-copied");
         }, 2000);
+      }).catch(() => {
+        const btn = event.currentTarget;
+        const tooltip = btn.querySelector(".tooltip-text");
+        const original = tooltip.textContent;
+        tooltip.textContent = "Copy failed";
+        setTimeout(() => {
+          tooltip.textContent = original;
+        }, 2000);
       });
     });
 
