@@ -600,6 +600,21 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      <div class="share-buttons">
+        <span class="share-label">Share:</span>
+        <button class="share-btn share-twitter tooltip" title="Share on X (Twitter)" aria-label="Share on X (Twitter)">
+          𝕏
+          <span class="tooltip-text">Share on X (Twitter)</span>
+        </button>
+        <button class="share-btn share-facebook tooltip" title="Share on Facebook" aria-label="Share on Facebook">
+          f
+          <span class="tooltip-text">Share on Facebook</span>
+        </button>
+        <button class="share-btn share-copy tooltip" title="Copy link" aria-label="Copy link to activity">
+          🔗
+          <span class="tooltip-text">Copy link</span>
+        </button>
+      </div>
     `;
 
     // Add click handlers for delete buttons
@@ -617,6 +632,42 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    // Add click handlers for share buttons
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(name)}`;
+    const shareText = `Check out "${name}" at Mergington High School: ${details.description}`;
+
+    activityCard.querySelector(".share-twitter").addEventListener("click", () => {
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+      window.open(twitterUrl, "_blank", "noopener,noreferrer");
+    });
+
+    activityCard.querySelector(".share-facebook").addEventListener("click", () => {
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+      window.open(facebookUrl, "_blank", "noopener,noreferrer");
+    });
+
+    activityCard.querySelector(".share-copy").addEventListener("click", (event) => {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        const btn = event.currentTarget;
+        const tooltip = btn.querySelector(".tooltip-text");
+        const original = tooltip.textContent;
+        tooltip.textContent = "Copied!";
+        btn.classList.add("share-copied");
+        setTimeout(() => {
+          tooltip.textContent = original;
+          btn.classList.remove("share-copied");
+        }, 2000);
+      }).catch(() => {
+        const btn = event.currentTarget;
+        const tooltip = btn.querySelector(".tooltip-text");
+        const original = tooltip.textContent;
+        tooltip.textContent = "Copy failed";
+        setTimeout(() => {
+          tooltip.textContent = original;
+        }, 2000);
+      });
+    });
 
     activitiesList.appendChild(activityCard);
   }
