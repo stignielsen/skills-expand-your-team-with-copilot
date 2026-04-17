@@ -442,7 +442,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Apply difficulty filter
       if (currentDifficultyFilter !== "") {
         const activityDifficulty = details.difficulty || "";
-        if (activityDifficulty !== currentDifficultyFilter) {
+        // Activities with no difficulty are for all levels and always shown
+        if (activityDifficulty !== "" && activityDifficulty !== currentDifficultyFilter) {
           return;
         }
       }
